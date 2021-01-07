@@ -1,0 +1,39 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>scrape_URLs</title>
+    <link rel="stylesheet" href="{% static 'scraping_tool/bootstrap.css' %}">
+
+</head>
+<body>
+
+<h1>Choose the Collection Period</h1>
+
+<form method='POST' action="{% url 'scraping_tool:scrape_URLs' %}">
+    {% csrf_token %}
+    {{ form.as_p }}
+
+    <div class='container'>
+        <div class='row'>
+            <div class='col'>
+                <a class='btn btn-outline-dark' href="{% url 'scraping_tool:index' %}" role='button'>
+                    Cancel
+                </a>
+                <button type="submit" class="btn btn-outline-primary">
+                    Start Scraping (It takes time.)
+                </button>
+            </div>
+
+        </div>
+    </div>
+
+
+</form>
+
+
+
+</body>
+</html>

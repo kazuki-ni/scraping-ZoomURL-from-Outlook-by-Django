@@ -1,0 +1,71 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    {% if item.is_scheduled == True %}
+        <title>Update Schedule</title>
+    {% else %}
+        <title>New Schedule</title>
+    {% endif %}
+    <link rel="stylesheet" href="{% static 'scraping_tool/bootstrap.css' %}">
+    <link rel="stylesheet" href="{% static 'scraping_tool/all.css' %}">
+
+
+</head>
+
+<body>
+    {% if item.is_scheduled == True %}
+        <h1>Update Schedule</h1>
+    {% else %}
+        <h1>Input the Details for This Event</h1>
+    {% endif %}
+
+    <form method='POST' action="">
+        {% csrf_token %}
+
+        <div class='cp_iptxt'>
+            <label class='ef'>
+                {{ form.as_p }}
+            </label>
+        </div>
+
+
+        <div class="container">
+            <div class='row'>
+
+                <div class='col'>
+                    <a class='btn btn-outline-dark' href="{% url 'scraping_tool:index' %}" role="button">
+                        Cancel
+                    </a>
+                    <button type="submit" class="btn btn-outline-success">
+                        {% if item.is_scheduled == True %}
+                            Update
+                        {% else %}
+                            New Schedule
+                        {% endif %}
+                    </button>
+                </div>
+            </div>
+        </div>
+    </form>
+    <br>
+
+
+    <p></p>
+
+    <span style='margin-left : 10px;'>
+        <h3>Mail Body</h3>
+    </span>
+    <div class='container'>
+        <div class='border' style='padding:10px'>
+            {{ body }}
+        </div>
+
+    </div>
+
+
+</body>
+</html>

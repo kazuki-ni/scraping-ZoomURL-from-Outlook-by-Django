@@ -1,0 +1,35 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Delete Schedule</title>
+    <link rel="stylesheet" href="{% static 'scraping_tool/bootstrap.css' %}">
+
+</head>
+<body>
+    
+    <h3>Delete Schedule</h3>
+    <p>Are you sure you want to delete this event?</p>
+    <p>Event Name: {{ item }}</p>
+
+
+    <div class='container'>
+        <div class='row'>
+            <div class='col-md-1'>
+                <a class='btn btn-outline-dark' href="{% url 'scraping_tool:index' %}" role='button'>
+                    Cancel
+                </a>
+            </div>
+            <div class='col-md-1'>
+                <form method='POST' action="">
+                    {% csrf_token %}
+                    <input class="btn btn-outline-danger" type="Submit" value="Confirm">
+                </form>
+            </div>
+        </div>
+    </div>
+
+</body>
+</html>

@@ -1,0 +1,58 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Join the meeting</title>
+    <link rel="stylesheet" href="{% static 'scraping_tool/bootstrap.css' %}">
+
+</head>
+<body>
+    <h1>Click one of URLs to join the meeting!</h1>
+    <br>
+
+    
+    <br>
+    Zoom URL(s) of {{ name }}
+    <hr>
+
+    {% for u in urls %}
+    <div class="container">
+
+        <div class="row">
+            <div class="col-11">
+                {{ u }}
+            </div>
+            <div class="col-1">
+                <a class='btn btn-success' href="{{ u }}" role='button' target="_blank">
+                    Join
+                </a>
+            </div>
+        </div>
+    </div>
+    <hr>
+    {% endfor %}
+
+
+    <hr>
+    
+    <div class="justify-content-md-start">
+        <a class='btn btn-secondary' href="{% url 'scraping_tool:index' %}" role='button'>
+            Cancel
+        </a>
+    </div>
+
+    <span style="margin-left : 10px;">
+        <h3>Mail Body</h3>
+    </span>
+    <div class='container'>
+        <div class='border' style='padding:10px'>
+            {{ body }}
+        </div>
+
+    </div>
+
+
+</body>
+</html>

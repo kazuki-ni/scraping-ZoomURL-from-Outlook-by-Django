@@ -1,0 +1,99 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="widdiv=device-widdiv, initial-scale=1.0">
+    <title>Zoom Schedules</title>
+    <link rel="stylesheet" href="{% static 'scraping_tool/bootstrap.css' %}">
+
+</head>
+
+<body>
+    
+
+<h1>Zoom Schedules</h1>
+
+<div>
+    <a class='btn btn-outline-dark' href="{% url 'scraping_tool:scrape_URLs' %}" role='button'>Scrape Zoom URLs from Outlook</a>
+    <a class='btn btn-danger' href="{% url 'scraping_tool:delete_all' %}" role='button'>Delete All URLs</a>
+</div>
+
+<hr>
+
+<h3>Scheduled Events</h3>
+
+{% for item in scheduled_items %}
+
+    <hr>
+
+    <div class='container'>
+
+        <div class='row'>
+            <div class='col-3'>
+                {{ item.name }}
+            </div>
+            <div class='col-5'>
+                Scheduled: {{ item.event_datetime }}
+            </div>
+
+            <div class='col'>
+                <a class='btn btn-outline-success' href="{% url 'scraping_tool:join' item.id %}" role='button'>
+                    Join
+                </a>
+                <a class='btn btn-outline-primary' href="{% url 'scraping_tool:update' item.id %}" role='button'>
+                    Update
+                </a>
+                <a class='btn btn-outline-danger' href="{% url 'scraping_tool:delete' item.id %}" role='button'>
+                    Delete
+                </a>
+            </div>
+
+        </div>
+
+        <hr>
+
+    </div>
+
+{% endfor %}
+
+<hr>
+
+<h3>Unscheduled Events</h3>
+<hr>
+
+{% for item in unscheduled_items %}
+
+    <div class='container'>
+        
+        <div class='row'>
+            <div class='col-md-3'>
+                {% if item.sender %}
+                    {{ item.sender }} 
+                {% else %}
+                    {{ "No Name" }}
+                {% endif %}     
+            </div>
+            <div class='col-md-5'>
+                Received: {{ item.received_time }}
+            </div>
+
+            <div class='col'>
+                <a class='btn btn-outline-primary' href="{% url 'scraping_tool:update' item.id %}" role='button'>
+                    Schedule
+                </a>
+                <a class='btn btn-outline-danger' href="{% url 'scraping_tool:delete' item.id %}" role='button'>
+                    Delete
+                </a>
+            </div>
+
+        </div>
+
+        <hr>
+
+    </div>
+
+{% endfor %}
+
+</body>
+</html>
