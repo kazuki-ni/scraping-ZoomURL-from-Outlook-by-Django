@@ -29,7 +29,6 @@ def delete_all(request):
         items.delete()
         return redirect('/')
      
-
     context = {}
     return render(request, 'scraping_tool/delete_all.html', context)
 
@@ -45,16 +44,16 @@ def index(request):
 def join(request, pk):
     item = Mail.objects.get(id=pk)
     name = item.name
-    body = item.body.replace('|', '\n')
+    body_list = item.body.split('|')
     urls = item.url_list.split('|')
 
-    context = {'name': name, 'body': body, 'urls': urls}
+    context = {'name': name, 'body_list': body_list, 'urls': urls}
     return render(request, 'scraping_tool/join.html', context)
 
 
 def update(request, pk):
     item = Mail.objects.get(id=pk)
-    body = item.body.replace('|', '\n')
+    body_list = item.body.split('|')
     form = ScheduleForm(instance=item)
 
     if request.method == 'POST':
@@ -64,7 +63,7 @@ def update(request, pk):
             Mail.objects.filter(id=pk).update(is_scheduled=True)
         return redirect('/')
 
-    context = {'form': form, 'item': item, 'body': body}
+    context = {'form': form, 'item': item, 'body_list': body_list}
     return render(request, 'scraping_tool/update.html', context)
 
 

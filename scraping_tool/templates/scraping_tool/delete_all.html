@@ -15,12 +15,12 @@
 
     <div class='container'>
         <div class='row'>
-            <div class='col-md-1'>
+            <div class='col-md-2'>
                 <a class='btn btn-outline-dark' href="{% url 'scraping_tool:index' %}" role='button'>
                     Cancel
                 </a>
             </div>
-            <div class='col-md-1'>
+            <div class='col-md-2'>
                 <form method='POST' action="">
                     {% csrf_token %}
                     <input class="btn btn-outline-danger" type="Submit" value="Delete All">

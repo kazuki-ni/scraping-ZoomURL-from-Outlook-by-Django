@@ -59,12 +59,13 @@
     <span style='margin-left : 10px;'>
         <h3>Mail Body</h3>
     </span>
-    <div class='container'>
-        <div class='border' style='padding:10px'>
-            {{ body }}
-        </div>
 
+    <div class='border' style='padding:10px'>
+        {% for sentence in body_list %}
+            {{ sentence }}<br>
+        {% endfor %}
     </div>
+
 
 
 </body>

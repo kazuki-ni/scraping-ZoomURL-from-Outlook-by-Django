@@ -1,6 +1,8 @@
 # モジュールのインポート
 import win32com.client
+import pythoncom
 import datetime
+import pytz
 import re
 
 from .models import *
@@ -55,6 +57,45 @@ def contains_zoom(mail):
     return 'zoom.us' in body and 'http' in body
 
 
+# ミーティング参加に関係のないURLは弾く
+def exclude_url(url):
+
+    # Zoomの公式サイト関係のURL
+    pattern_public = [
+        "https://zoom.us/",
+        "https://zoom.us/support/download",
+        "https://zoom.us/test"
+        ]
+
+    # 「カレンダーに追加」系のURL
+    pattern_calender_1 = 'zoom.us/meeting/attendee/[\w/:%#\$&\?\(\)~\.=\+\-]+type='
+    pattern_calender_2 = 'zoom.us/webinar/[\w/:%#\$&\?\(\)~\.=\+\-]+type='
+
+    # ミーティング登録キャンセルのURL
+    pattern_cancel_1 = 'zoom.us/meeting/register/[\w/:%#\$&\?\(\)~\.=\+\-]+act=cancel'
+    pattern_cancel_2 = 'zoom.us/webinar/register/[\w/:%#\$&\?\(\)~\.=\+\-]+act=cancel'
+
+    # 国際通話用ダイヤルイン番号ページへのURL
+    pattern_dial = 'zoom.us/u/\w+'
+
+    # まとめる
+    patterns = re.compile('{}|{}|{}|{}|{}'.format(
+        pattern_calender_1,
+        pattern_calender_2,
+        pattern_cancel_1,
+        pattern_cancel_2,
+        pattern_dial
+    ))
+
+    # 除外処理
+    if url in pattern_public:
+        return False
+    elif patterns.search(url):
+        return False
+    else:
+        return True
+
+
 # zoomのリンクを抽出する関数
 def extract_url(body):
     
@@ -62,37 +103,48 @@ def extract_url(body):
     url_pattern = 'https://[\.\-\w]*zoom.us/[\w/:%#\$&\?\(\)~\.=\+\-]+'
     temp_url_list = list(set(re.findall(url_pattern, body)))
 
-    # 以下のURLは弾く（ひとつのことが多いのでこのコード）
-    url_list = filter(
-        lambda u: u not in [
-            "https://zoom.us/",
-            "https://zoom.us/support/download",
-            "https://zoom.us/test"
-            ],
-        temp_url_list
-        )
+    # 以下のURLは弾く
+    url_list = list(filter(exclude_url, temp_url_list))
 
-    # URLを"|"で接続
-    url_list = '|'.join(url_list)
+    # URLを"|"で接続（DBにはリスト型は入らないため、URLに使われない'|'で結合）
+    urls = '|'.join(url_list)
 
-    return url_list
+    return urls
+
+
+# メール本文を整える
+def format_body(body):
+
+    # <URL>を削除
+    pattern = '<https??://[\w/:%#\$&\?\(\)~\.=\+\-]+>'
+    modified_body = re.sub(pattern, '', body)
+
+    # \r\nを'|'に置換（HTML表示するときに消えてしまうため）
+    modified_body = modified_body.replace('\r\n', '|')
+
+    return modified_body
 
 
 # テーブルへ入力
 def input_table(mails):
 
-    # 作成クエリの配列
+    # データセットの作成
     data_set = []
 
     # zoomアドレスを含むメール１通ごとの内容をテーブルに書き込む
     for mail in mails:
 
-        # 受信日をdatetime型に変型
+        # 受信日をdatetime(aware)型に変型（このやり方の方がdateutil.parserより速い）
         temp_t = str(mail.ReceivedTime).partition('+')[0].partition('.')[0]
-        received_time = datetime.datetime.strptime(temp_t, "%Y-%m-%d %H:%M:%S")
+        received_time = datetime.datetime.strptime(temp_t, "%Y-%m-%d %H:%M:%S").astimezone(pytz.utc)
+
+        mail_body = mail.body
 
         # zoomのURLのかたまりと個数を取り出す
-        url_list = extract_url(mail.body)
+        url_list = extract_url(mail_body)
+
+        # メール本文を成形する
+        mail_body = format_body(mail_body)
 
         # エラー処理
         try:            
@@ -102,13 +154,14 @@ def input_table(mails):
                 sender_email_address = mail.senderEmailAddress,
                 received_time = received_time,
                 url_list = url_list,
-                body = re.sub("[\s]", '|', str(mail.body)).replace('。', '。|')
+                body = mail_body
                 )
             data_set.append(data)
 
         except:
             print("Cannot Insert {}".format(mail.subject))
     
+    # いっきにmodelに入力
     Mail.objects.bulk_create(data_set)
 
 
@@ -118,7 +171,7 @@ def scrape(sf, su):
     scrape_from = datetime.datetime(sf.year, sf.month, sf.day, 0, 0, 0)
     scrape_until = datetime.datetime(su.year, su.month, su.day, 0, 0, 0)
 
-    import pythoncom
+    # これがないとerrorが出る
     pythoncom.CoInitialize()
 
     outlook = win32com.client.Dispatch('Outlook.Application').GetNamespace('MAPI')

@@ -34,7 +34,6 @@ ALLOWED_HOSTS = []
 # Application definition
 
 INSTALLED_APPS = [
-    'widget_tweaks',
     'scraping_tool.apps.ScrapingToolConfig',
     'django.contrib.admin',
     'django.contrib.auth',

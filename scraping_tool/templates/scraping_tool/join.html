@@ -48,7 +48,9 @@
     </span>
     <div class='container'>
         <div class='border' style='padding:10px'>
-            {{ body }}
+            {% for sentence in body_list %}
+                {{ sentence }}<br>
+            {% endfor %}
         </div>
 
     </div>
