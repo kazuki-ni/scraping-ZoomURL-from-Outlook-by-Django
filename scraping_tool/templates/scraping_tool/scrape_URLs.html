@@ -1,39 +1,79 @@
-{% load static %}
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>scrape_URLs</title>
-    <link rel="stylesheet" href="{% static 'scraping_tool/bootstrap.css' %}">
+{% extends 'scraping_tool/base.html' %}
+{% load widget_tweaks %}
 
-</head>
-<body>
 
-<h1>Choose the Collection Period</h1>
+{% block title %}
+    Scrape URLs
+{% endblock %}
 
-<form method='POST' action="{% url 'scraping_tool:scrape_URLs' %}">
-    {% csrf_token %}
-    {{ form.as_p }}
 
-    <div class='container'>
-        <div class='row'>
-            <div class='col'>
-                <a class='btn btn-outline-dark' href="{% url 'scraping_tool:index' %}" role='button'>
-                    Cancel
-                </a>
-                <button type="submit" class="btn btn-outline-primary">
-                    Start Scraping (It takes time.)
-                </button>
+{% block nav %}
+    <li class="nav-item">
+        <a class="nav-link" href="{% url 'scraping_tool:index' %}">Cancel</a>
+    </li>
+{% endblock %}
+
+
+{% block content %}
+    <div class='mb-1'></div>
+    <div class="m-5 py-4">
+        <main>
+            <!-- Title -->
+            <div class="pt-5 pb-3 text-center">
+                <h1>Scrape URLs</h1>
+                <p class="lead">Choose the Collection Period and Start Scraping.</p>
             </div>
 
-        </div>
+            <div class="justify-content-around row g-3">
+
+                <!-- Form -->
+                <div class="justify-content-around order-md-first">
+
+                    <form method='POST' action="{% url 'scraping_tool:scrape_URLs' %}">
+                        {% csrf_token %}
+                        {{ form.media }}
+                        
+                        <div class='form-row mb-2'>
+                            <div class="form-group col-sm-6">
+                                <label for="collect_from" class="form-label">Collect from: <span class="text-muted">*</span></label>
+                                {% render_field form.collect_from class+="form-control" id+='collect_from' %}
+                            </div>
+                            <div class="form-group col-sm-6">
+                                <label for="collect_until" class="form-label">Collect until: <span class="text-muted">*</span></label>
+                                {% render_field form.collect_until class+="form-control" id+='collect_until' %}
+                            </div>
+                        </div>
+
+                        <div class='row d-flex justify-content-around pt-3'>
+                            <div class=''>
+                                <button type="submit" class="btn btn-success my-2">
+                                    Start Scraping (It takes time.)
+                                </button>
+                            </div>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </main>
     </div>
 
+{% endblock %}
 
-</form>
-
-
-
-</body>
-</html>
+{% block js %}
+    <script>
+        window.onload = function setDate() {
+            const today = new Date();
+            const yesterday = new Date()
+            yesterday.setDate(yesterday.getDate() - 1)
+            document.getElementById('collect_from').value = formatDate(yesterday);
+            document.getElementById('collect_until').value = formatDate(today);
+        }
+        
+        function formatDate(t) {
+            const yyyy = t.getFullYear();
+            const mm = ('0' + (t.getMonth() + 1)).slice(-2);
+            const dd = ('0' + (t.getDate())).slice(-2);
+            return (yyyy + '-' + mm + '-' + dd);
+        }
+    </script>
+{% endblock %}

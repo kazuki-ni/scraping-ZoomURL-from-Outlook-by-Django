@@ -1,60 +1,99 @@
-{% load static %}
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Join the meeting</title>
-    <link rel="stylesheet" href="{% static 'scraping_tool/bootstrap.css' %}">
+{% extends 'scraping_tool/base.html' %}
+{% load widget_tweaks %}
 
-</head>
-<body>
-    <h1>Click one of URLs to join the meeting!</h1>
-    <br>
 
-    
-    <br>
-    Zoom URL(s) of {{ name }}
-    <hr>
+{% block title %}
+    Join the Meeting
+{% endblock %}
 
-    {% for u in urls %}
-    <div class="container">
+{% block nav %}
+    <li class="nav-item">
+        <a class="nav-link" href="{% url 'scraping_tool:index' %}">Cancel</a>
+    </li>
+    <li class="nav-item">
+        <a class="nav-link delete-box" delete-url="{% url 'scraping_tool:delete' item.id %}" href="{% url 'scraping_tool:index'  %}" style="color: red;">Delete</a>
+    </li>
+{% endblock %}
 
-        <div class="row">
-            <div class="col-11">
-                {{ u }}
+{% block content %}
+    <div class='mb-1'></div>
+    <div class="m-5 py-4">
+        <main>
+            <!-- Title -->
+            <div class="text-center mail-box-no-hover">
+                <h1>Join the Meeting</h1>
+                <p class="lead">You can click one of URLs to join the meeting.</p>
+
+                <!-- URLs -->
+                <div class="pt-1 url-list">
+                    <ul class="mb-1 url-box">
+                        {% for url in urls %}
+                                <li class='row'>
+                                    <div class='col-11 wrap-url'>
+                                        <small class='text-muted'>{{ url }}</small>
+                                    </div>
+                                    <div class='col-1'>
+                                        <a href="{{ url }}" target="_blank">
+                                            <i class="fas fa-sign-in-alt join"></i>
+                                        </a>
+                                    </div>
+                                </li>
+                        {% endfor %}
+                    </ul>
+                </div>
             </div>
-            <div class="col-1">
-                <a class='btn btn-success' href="{{ u }}" role='button' target="_blank">
-                    Join
-                </a>
+
+            
+            <!-- Mail Details -->
+            <div class="mb-1 mail-box-no-hover">
+                <h4 class="mb-3">
+                    <span class="text-light">Mail Details</span>
+                </h4>
+                <ul class="list-group mb-3">
+                    <li class="list-group-item">
+                        <h6 class="my-0">Event name</h6>
+                        <small class="text-muted">{{ item.name }}</small>
+                    </li>
+                    <li class="list-group-item">
+                        <h6 class="my-0">Held by</h6>
+                        <small class="text-muted">{{ item.sender }}</small>
+                    </li>
+                    <li class="list-group-item">
+                        <h6 class="my-0">Scheduled at</h6>
+                        <small class="text-muted">{{ item.event_day }}: {{ item.start_time }}～{{ item.end_time }}</small>
+                    </li>
+                    <li class="list-group-item wrap-body">
+                        <h6 class="my-0">Mail Body</h6>
+                        <small class="text-muted">
+                            {% for sentence in body_list %}
+                                {{ sentence }}<br>
+                            {% endfor %}
+                        </small>
+                    </li>
+                </ul>
             </div>
-        </div>
+
+        </main>
     </div>
-    <hr>
-    {% endfor %}
+{% endblock %}
 
-
-    <hr>
-    
-    <div class="justify-content-md-start">
-        <a class='btn btn-secondary' href="{% url 'scraping_tool:index' %}" role='button'>
-            Cancel
-        </a>
-    </div>
-
-    <span style="margin-left : 10px;">
-        <h3>Mail Body</h3>
-    </span>
-    <div class='container'>
-        <div class='border' style='padding:10px'>
-            {% for sentence in body_list %}
-                {{ sentence }}<br>
-            {% endfor %}
-        </div>
-
-    </div>
-
-
-</body>
-</html>
+<script>
+    // Delete:Ajax
+    $('.delete-box').click(function(event) {
+        const url = $(this).attr("delete-url");
+        $.ajax(
+            {
+                method: "GET",
+                url: url,
+                data: {}
+            }
+        )
+        // success
+        .done( (item_id) => {
+        })
+        // fail
+        .fail( (data) => {
+            alert('Deletion Failure')
+        })
+    })
+</script>

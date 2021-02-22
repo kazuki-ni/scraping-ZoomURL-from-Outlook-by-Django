@@ -1,72 +1,142 @@
-{% load static %}
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+{% extends 'scraping_tool/base.html' %}
+{% load widget_tweaks %}
 
+
+{% block title %}
     {% if item.is_scheduled == True %}
-        <title>Update Schedule</title>
+        Update Schedule
     {% else %}
-        <title>New Schedule</title>
+        New Schedule
     {% endif %}
-    <link rel="stylesheet" href="{% static 'scraping_tool/bootstrap.css' %}">
-    <link rel="stylesheet" href="{% static 'scraping_tool/all.css' %}">
+{% endblock %}
 
+{% block nav %}
+    <li class="nav-item">
+        <a class="nav-link" href="{% url 'scraping_tool:index' %}">Cancel</a>
+    </li>
+    <li class="nav-item">
+        <a class="nav-link" href="{% url 'scraping_tool:delete' item.id %}" style="color: red;">Delete</a>
+    </li>
+{% endblock %}
 
-</head>
-
-<body>
-    {% if item.is_scheduled == True %}
-        <h1>Update Schedule</h1>
-    {% else %}
-        <h1>Input the Details for This Event</h1>
-    {% endif %}
-
-    <form method='POST' action="">
-        {% csrf_token %}
-
-        <div class='cp_iptxt'>
-            <label class='ef'>
-                {{ form.as_p }}
-            </label>
-        </div>
-
-
-        <div class="container">
-            <div class='row'>
-
-                <div class='col'>
-                    <a class='btn btn-outline-dark' href="{% url 'scraping_tool:index' %}" role="button">
-                        Cancel
-                    </a>
-                    <button type="submit" class="btn btn-outline-success">
-                        {% if item.is_scheduled == True %}
-                            Update
-                        {% else %}
-                            New Schedule
-                        {% endif %}
-                    </button>
+{% block content %}
+    <div class='mb-1'></div>
+    <div class="m-5 py-4">
+        <main>
+            <!-- Title -->
+            <div class="text-center title-box pt-5 pb-3">
+                <h1>Check and Update</h1>
+                <p class="lead">You can check the detail and add some contents here.</p>
+            </div>
+    
+            <div class="row mb-3 mail-box-no-hover">
+    
+                <!-- Form -->
+                <div class="col-sm-5 order-md-first">
+    
+                    <h4 class="mb-3">
+                        <span class="text-light">Update Form</span>
+                    </h4>
+    
+                    <form method="POST" name='updateForm' action="" class="needs-validation" onsubmit="return validateForm()">
+                        {% csrf_token %}
+                        {{ form.media }}
+                        <div class="form-group mb-2">
+                            <label for="name" class="form-label text-light">Event Name: <span class="text-muted">*</span></label>
+                            {% render_field form.name class+="col form-control" id+='name' %}
+                        </div>
+    
+                        <div class="form-group mb-2">
+                            <label for="event_day" class="form-label text-light">Event Day: <span class="text-muted">*</span></label>
+                            {% render_field form.event_day class+="col form-control" id+='event_day' %}
+                        </div>
+    
+                        <div class='form-row mb-2'>
+                            <div class="form-group col-md-6">
+                                <label for="start_time" class="form-label text-light">Start from: <span class="text-muted">*</span></label>
+                                {% render_field form.start_time class+="form-control" id+='start_time' name+='start_time' %}
+                            </div>
+                            <div class="form-group col-md-6">
+                                <label for="end_time" class="form-label text-light">End at: <span class="text-muted">*</span></label>
+                                {% render_field form.end_time class+="form-control" id+='end_time' name+='end_time' %}
+                            </div>
+                        </div>
+    
+                        <div class="form-group mb-2">
+                            <label for="comment" class="form-label text-light">Comment: </label>
+                            {% render_field form.comment class+="col form-control" id+='comment' %}
+                        </div>
+    
+                        <div class='row d-flex justify-content-around'>
+                            <div class=''>
+                                <button type="submit" class="btn btn-success my-2">
+                                    {% if item.is_scheduled == True %}
+                                        Update
+                                    {% else %}
+                                        New Schedule
+                                    {% endif %}
+                                </button>
+                            </div>
+                            <div class=''>
+                                <a class="btn btn-dark my-2" href="{% url 'scraping_tool:index' %}" role="button">
+                                    Cancel
+                                </a>
+                            </div>
+                        </div>
+                        <p class='text-danger'>{{ message }}</p>
+    
+                    </form>
+                </div>
+    
+                <!-- Mail Details -->
+                <div class="col-sm-7">
+                    <h4 class="mb-3">
+                        <span class="text-light">Mail Details</span>
+                    </h4>
+                    <ul class="list-group mb-3">
+                        <li class="list-group-item">
+                            <div>
+                                <h6 class="my-0">Sender</h6>
+                                <small class="text-muted">{{ item.sender }}</small>
+                            </div>
+                        </li>
+                        <li class="list-group-item">
+                            <div>
+                                <h6 class="my-0">Received from:</h6>
+                                <small class="text-muted">{{ item.sender_email_address }}</small>
+                            </div>
+                        </li>
+                        <li class="list-group-item">
+                            <div>
+                                <h6 class="my-0">Received at:</h6>
+                                <small class="text-muted">{{ item.received_time }}</small>
+                            </div>
+                        </li>
+                        <li class="list-group-item">
+                            <div>
+                                <h6 class="my-0">Mail Body</h6>
+                                <small class="text-muted wrap-body">
+                                    {% for sentence in body_list %}
+                                        {{ sentence }}<br>
+                                    {% endfor %}
+                                </small>
+                            </div>
+                        </li>
+                    </ul>
                 </div>
             </div>
-        </div>
-    </form>
-    <br>
-
-
-    <p></p>
-
-    <span style='margin-left : 10px;'>
-        <h3>Mail Body</h3>
-    </span>
-
-    <div class='border' style='padding:10px'>
-        {% for sentence in body_list %}
-            {{ sentence }}<br>
-        {% endfor %}
+        </main>
+    
     </div>
 
-
-
-</body>
-</html>
+    <script>
+        // function validateForm() {
+        //     const st = document.forms['updateForm']['start_time'].value;
+        //     const et = document.forms['updateForm']['end_time'].value;
+        //     if (st == '' || et == '') {
+        //         alert('Meeting time must be filled')
+        //         return False
+        //     }
+        // }
+    </script>
+{% endblock %} 

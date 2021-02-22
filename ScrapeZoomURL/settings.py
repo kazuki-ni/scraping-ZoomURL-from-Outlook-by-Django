@@ -34,6 +34,9 @@ ALLOWED_HOSTS = []
 # Application definition
 
 INSTALLED_APPS = [
+    'bootstrap_datepicker_plus',
+    'bootstrap4',
+    'widget_tweaks',
     'scraping_tool.apps.ScrapingToolConfig',
     'django.contrib.admin',
     'django.contrib.auth',
@@ -43,6 +46,10 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
 
 ]
+
+BOOTSTRAP4 = {
+    'include_jquery': True
+}
 
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',

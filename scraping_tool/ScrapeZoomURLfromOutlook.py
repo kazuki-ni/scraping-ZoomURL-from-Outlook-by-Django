@@ -48,7 +48,7 @@ def choose_period(mails, scrape_from, scrape_until):
 
 # 受信メールフォルダを選ぶ関数
 def choose_inbox(folder):
-    return str(folder) in ['Inbox', 'inbox', '受信トレイ']
+    return str(folder) in ['Inbox', 'inbox', '受信トレイ', 'INBOX']
 
 
 # 本文に'zoom.us'のhttpアドレスを含むメールのみTrueを返す関数
@@ -140,7 +140,7 @@ def input_table(mails):
 
         mail_body = mail.body
 
-        # zoomのURLのかたまりと個数を取り出す
+        # zoomのURLのかたまりを取り出す
         url_list = extract_url(mail_body)
 
         # メール本文を成形する
@@ -175,22 +175,15 @@ def scrape(sf, su):
     pythoncom.CoInitialize()
 
     outlook = win32com.client.Dispatch('Outlook.Application').GetNamespace('MAPI')
-    
-    # メールアドレスごとにアカウントを分ける
-    accounts = outlook.Folders
-
 
     # メールアドレスごとに処理
-    for account in accounts:
+    for address in outlook.Folders:
 
-        # 受信メールフォルダを選択
-        folders = account.Folders
-        # 受信フォルダはひとつなのでリストの一つ目を選択
-        inbox = list(filter(choose_inbox, folders))[0]
+        # 受信フォルダを選択
+        inbox = list(filter(choose_inbox, address.Folders))[0]
         
         # zoomアドレスを持つメールを集計
-        all_items = inbox.Items
-        items = choose_period(all_items, scrape_from, scrape_until)
+        items = choose_period(inbox.Items, scrape_from, scrape_until)
         zoom_mails = list(filter(contains_zoom, items))
 
         # テーブルに入力
