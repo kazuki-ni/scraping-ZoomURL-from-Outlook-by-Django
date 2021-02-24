@@ -1,0 +1,141 @@
+.datepicker-days th.dow:first-child,
+.datepicker-days td:first-child {
+    color: #f00;
+}
+.datepicker-days th.dow:last-child,
+.datepicker-days td:last-child {
+    color: #00f;
+}
+
+body {
+    background-image: url('background_image.jpeg');
+    background-repeat: no-repeat;
+    background-attachment: fixed;
+    background-position: center center;
+    background-size: cover;
+    background-color: #8F806E;
+    overflow-y: scroll;
+}
+
+li {
+    list-style: none;
+}
+.url-list ul {
+    padding: 0;
+    margin: 0;
+}
+.url-list li {
+    margin: 0;
+    padding: 0;
+    list-style-position:outside;
+}
+.no-space-list {
+    padding: 0px;
+}
+
+.mail-font {
+    font-family: Arial, Helvetica, sans-serif;
+    color: silver;
+}
+.mail-font a {
+    text-decoration: none;
+}
+
+.mail-box {
+    background-color: rgba(119, 105, 89, 0.7);
+    margin: 10px;
+    padding: 20px;
+    border-radius: 10px;
+    color: #fff;
+    font-size: 16px;
+    box-shadow: 0px -1px 10px -4px rgba(0,0,0,0.75);
+    -webkit-box-sizing: border-box;
+    -moz-box-sizing: border-box;
+    box-sizing: border-box;
+    -webkit-transition: all .3s;
+    transition: all 0.3s;
+}
+.mail-box:hover {
+    background-color: rgba(119, 105, 89, 1);
+    color: #2F2B2D;
+    cursor: pointer;
+}
+.mail-box-no-hover {
+    background-color: rgba(119, 105, 89, 0.7);
+    margin: 10px;
+    padding: 20px;
+    border-radius: 10px;
+    font-size: 16px;
+    box-shadow: 0px -1px 10px -4px rgba(0,0,0,0.75);
+}
+
+.url-box {
+    background-color: rgba(255, 255, 255, 0.932);
+    margin: 10px;
+    padding: 20px;
+    border-radius: 5px;
+    font-size: 16px;
+    box-shadow: 0px -1px 10px -4px rgba(0,0,0,0.75);
+}
+
+.wrap-url {
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    overflow: hidden;
+}
+.wrap-body {
+    word-wrap: break-word;
+}
+
+.delete {
+    cursor: pointer;
+    color: rgb(255, 166, 0);
+}
+
+.delete:hover {
+    color: rgb(113, 87, 56);
+}
+.join {
+    cursor: pointer;
+    color:#60B564;
+}
+.join:hover {
+    color: #2C8030;
+}
+
+.a-style {
+    color: red;
+
+}
+
+/* 見かけ上削除。実際には消していない　*/
+.filtered {
+    display: none !important;
+}
+
+.scraping-emphasis {
+	position: relative;
+	border: none;
+	color: #f49a25;
+	text-decoration: none;
+	font-weight: 600;
+	-webkit-animation-iteration-count: infinite;
+	animation-iteration-count: infinite;
+	-webkit-animation-duration: 3s;
+    animation-duration: 3s; 
+    -webkit-animation-name: pulse;
+    animation-name: pulse;
+	}
+@-webkit-keyframes pulse {
+  50%	{
+		border-radius:30px;
+		color:#ff9100;
+		opacity:0.3;
+		}
+	}
+@keyframes pulse {
+  50%	{
+		border-radius:30px;
+		color:#ff9100;
+		}
+	}
