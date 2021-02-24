@@ -72,5 +72,3 @@ def delete(request, pk):
         item_id = 'mail-{}'.format(pk)
         item.delete()
         return HttpResponse(item_id)
-
-

@@ -1,4 +1,5 @@
 {% extends 'scraping_tool/base.html' %}
+{% load static %}
 {% load widget_tweaks %}
 
 
@@ -12,16 +13,15 @@
 
 {% block nav %}
     <li class="nav-item">
-        <a class="nav-link" href="{% url 'scraping_tool:index' %}">Cancel</a>
+        <a class="nav-link index-nav" href="{% url 'scraping_tool:index' %}">Cancel</a>
     </li>
     <li class="nav-item">
-        <a class="nav-link" href="{% url 'scraping_tool:delete' item.id %}" style="color: red;">Delete</a>
+        <a class="nav-link delete-nav" href="{% url 'scraping_tool:delete' item.id %}" style="color: red;">Delete</a>
     </li>
 {% endblock %}
 
 {% block content %}
-    <div class='mb-1'></div>
-    <div class="m-5 py-4">
+    <div class="m-5 mt-2 py-4">
         <main>
             <!-- Title -->
             <div class="text-center title-box pt-5 pb-3">
@@ -129,14 +129,9 @@
     
     </div>
 
-    <script>
-        // function validateForm() {
-        //     const st = document.forms['updateForm']['start_time'].value;
-        //     const et = document.forms['updateForm']['end_time'].value;
-        //     if (st == '' || et == '') {
-        //         alert('Meeting time must be filled')
-        //         return False
-        //     }
-        // }
-    </script>
-{% endblock %} 
+{% endblock %}
+
+{% block js %}
+    <script src="{% static 'scraping_tool/delete.js' %}"></script>
+{% endblock %}
+

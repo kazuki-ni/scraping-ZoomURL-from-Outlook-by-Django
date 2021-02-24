@@ -1,4 +1,5 @@
 {% extends 'scraping_tool/base.html' %}
+{% load static %}
 {% load widget_tweaks %}
 
 
@@ -8,16 +9,15 @@
 
 {% block nav %}
     <li class="nav-item">
-        <a class="nav-link" href="{% url 'scraping_tool:index' %}">Cancel</a>
+        <a class="nav-link index-nav" href="{% url 'scraping_tool:index' %}">Cancel</a>
     </li>
     <li class="nav-item">
-        <a class="nav-link delete-box" delete-url="{% url 'scraping_tool:delete' item.id %}" href="{% url 'scraping_tool:index'  %}" style="color: red;">Delete</a>
+        <a class="nav-link delete-nav" delete-url="{% url 'scraping_tool:delete' item.id %}" href="{% url 'scraping_tool:index'  %}" style="color: red;">Delete</a>
     </li>
 {% endblock %}
 
 {% block content %}
-    <div class='mb-1'></div>
-    <div class="m-5 py-4">
+    <div class="m-5 mt-2 py-4">
         <main>
             <!-- Title -->
             <div class="text-center mail-box-no-hover">
@@ -77,23 +77,8 @@
     </div>
 {% endblock %}
 
-<script>
-    // Delete:Ajax
-    $('.delete-box').click(function(event) {
-        const url = $(this).attr("delete-url");
-        $.ajax(
-            {
-                method: "GET",
-                url: url,
-                data: {}
-            }
-        )
-        // success
-        .done( (item_id) => {
-        })
-        // fail
-        .fail( (data) => {
-            alert('Deletion Failure')
-        })
-    })
-</script>
+{% block js %}
+    <script src="{% static 'scraping_tool/delete.js' %}"></script>
+{% endblock %}
+
+
