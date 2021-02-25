@@ -1,0 +1,51 @@
+[
+    {
+        "sender": "Zoom",
+        "sender_email_address": "sample@zoom.us",
+        "received_time": "2020-04-13T04:54:35+00:00",
+        "url_list": "https://support.zoom.us|https://zoom.us/activate",
+        "mail_body": "sample text. sample text. sample text. sample text. sample text. ||https://support.zoom.us||https://zoom.us/activate||sample text. sample text. sample text. sample text. sample text. "
+    },
+    {
+        "sender": "Krish Lee",
+        "sender_email_address": "krish.lee@sample.com",
+        "received_time": "2020-04-13T04:58:21+00:00",
+        "url_list": "https://zoom.us/meeting/attendee/",
+        "mail_body": "Hi.|Thank you for registering for my meeting.|Please submit any questions to: krish.lee@learningcontainer.com||Date Time: Apr 13, 2020 02:30 PM Osaka, Sapporo, Tokyo|    Every week on Mon, until Jul 27, 2020, 15 occurrence(s)|    Apr 13, 2020 02:30 PM|    Apr 20, 2020 02:30 PM|    Apr 27, 2020 02:30 PM|    May 11, 2020 02:30 PM|    May 18, 2020 02:30 PM|    May 25, 2020 02:30 PM|    Jun 1, 2020 02:30 PM|    Jun 8, 2020 02:30 PM|    Jun 15, 2020 02:30 PM|    Jun 22, 2020 02:30 PM|    Jun 29, 2020 02:30 PM|    Jul 6, 2020 02:30 PM|    Jul 13, 2020 02:30 PM|    Jul 20, 2020 02:30 PM|    Jul 27, 2020 02:30 PM|    Please download and import the following iCalendar (.ics) files to your calendar system.|    Weekly: https://zoom.us/meeting/attendee/||Join from PC, Mac, Linux, iOS or Android: Click Here to Join  |Password: 357091|Note: This link should not be shared with others; it is unique to you.|Add to Calendar   Add to Google Calendar     Add to Yahoo Calendar  |||Or an H.323/SIP room system:|    H.323: |        162.255.37.11 (US West)|        162.255.36.11 (US East)|        221.122.88.195 (China)|        115.114.131.7 (India Mumbai)|        115.114.115.7 (India Hyderabad)|        213.19.144.110 (EMEA)|        103.122.166.55 (Australia)|        209.9.211.110 (Hong Kong)|        64.211.144.160 (Brazil)|        69.174.57.160 (Canada)|        207.226.132.110 (Japan)|    Meeting ID: 480 495 752|    Password: 357091||    SIP: 480495752@zoomcrc.com|    Password: 357091||You can cancel   your registration at any time.|\t| \t |  "
+    },
+    {
+        "sender": "racks jacson",
+        "sender_email_address": "racks.jacson@sample.com",
+        "received_time": "2020-04-13T05:53:28+00:00",
+        "url_list": "https://zoom.us/meeting",
+        "mail_body": "Thank you very much.|| I'm looking forward to talking with you in the next meeting.|I hope you could join the meeting of which URL below:|https://zoom.us/meeting||Thank you,|Racks Jacson"
+    },
+    {
+        "sender": "denial roast",
+        "sender_email_address": "denial.roast@sample.com",
+        "received_time": "2020-04-13T05:57:17+00:00",
+        "url_list": "https://zoom.us/meeting/attendee|https://zoom.us/w",
+        "mail_body": "Are you wake up?|You must hurry!|When you get ready, click either of the links to join the seminar||https://zoom.us/meeting/attendee|https://zoom.us/w"
+    },
+    {
+        "sender": "devid neo",
+        "sender_email_address": "devid.neo@sample.com",
+        "received_time": "2020-04-13T05:57:17+00:00",
+        "url_list": "https://zoom.us/meeting/attendee/|https://zoom.us/w/",
+        "mail_body": "Did you receive the mall from Daniel?|Hurry!!|https://zoom.us/meeting/attendee|https://zoom.us/w"
+    },
+    {
+        "sender": "jone mac",
+        "sender_email_address": "jone.mac@sample.com",
+        "received_time": "2020-04-13T05:57:17+00:00",
+        "url_list": "https://zoom.us/w/",
+        "mail_body": "This is the invitation of the upcoming karaoke event.|We hope you could join the event as a singer.|We are looking forward to meeting you and listening to your excellent voice.|Here is the link||https://zoom.us/w/||Best,|Jone Mac"
+    },
+    {
+        "sender": "Connor Murphy",
+        "sender_email_address": "connor.murphy@sample.com",
+        "received_time": "2020-04-13T05:57:17+00:00",
+        "url_list": "https://zoom.us/meeting/",
+        "mail_body": "Dear shareholders, ||As the time for Happy Home Insurance's annual general meeting approaches, we'd like to thank you for your ongoing support. We hope you will attend this year's meeting, which we have scheduled to take place on March 3, 2021, at 11 a.m. on Zoom. You'll find the link here. ||https://zoom.us/meeting/ ||We expect that the meeting will last between two and 2.5 hours. Please let us know if you can attend by clicking this link. We ask you to reply by February 15, as we need a quorum to hold the meeting as scheduled.||Thank you for your time, and we hope to see you on March 3.||Kind regards, |Connor Murphy|Business Development Manager"
+    }
+]
