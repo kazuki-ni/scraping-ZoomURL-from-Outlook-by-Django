@@ -7,14 +7,16 @@ const emphasizeScraping = function() {
     if (unscheduled_items.childElementCount == 0) {
         // Assign style to 'Scraping' in Nav
         document.getElementById('scraping').classList.add('scraping-emphasis');
+        document.getElementById('first-lead').style.display = 'none';
+        document.getElementById('scraping-lead').style.display = 'block';
+        document.getElementsByClassName('delete-all-box')[0].style.color = '';
 
-        // Create the sentence and Asign style to the lead sentence
-        const first_lead = document.getElementById('first-lead');
-        first_lead.innerHTML = 'Do <a>Scraping</a> to start.';
-        const first_lead_scraping = first_lead.getElementsByTagName('a')[0];
-        first_lead_scraping.classList.add('scraping-emphasis a-style');
-        const url = document.getElementById('scraping').href
-        first_lead_scraping.href = url;
+        // const first_lead = document.getElementById('first-lead');
+        // first_lead.innerHTML = 'Do <a>Scraping</a> to start.';
+        // const first_lead_scraping = first_lead.getElementsByTagName('a')[0];
+        // first_lead_scraping.classList.add('scraping-emphasis a-style');
+        // const url = document.getElementById('scraping').href
+        // first_lead_scraping.href = url;
 
         // Delete subtitle
         const subtitles = document.getElementsByClassName('subtitle')
@@ -24,6 +26,8 @@ const emphasizeScraping = function() {
 
     } else {
         document.getElementById('scraping').classList.remove('scraping-emphasis');
+        document.getElementById('first-lead').style.display = 'block';
+        document.getElementById('scraping-lead').style.display = 'none';
     }
 }
 
@@ -108,11 +112,15 @@ $('.delete-all-box').click(function(event) {
         )
         // success
         .done( (message) => {
-            const scheduled_parent = document.getElementById('scheduled_items')
-            const unscheduled_parent = document.getElementById('unscheduled_items')
-            removeChildren(scheduled_parent);
-            removeChildren(unscheduled_parent);
-            window.alert(message);
+            const scheduled_parent = document.getElementById('scheduled-items')
+            const unscheduled_parent = document.getElementById('unscheduled-items')
+            while (scheduled_parent.firstChild) {
+                scheduled_parent.removeChild(scheduled_parent.firstChild);
+            }
+            while (unscheduled_parent.firstChild) {
+                unscheduled_parent.removeChild(unscheduled_parent.firstChild);
+            }
+            // window.alert(message);
             displayNoSchedules();
         })
         // fail

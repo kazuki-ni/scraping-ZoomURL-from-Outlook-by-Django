@@ -104,8 +104,11 @@ li {
 }
 
 .a-style {
-    color: red;
-
+    color: #f49a25;
+}
+.a-style:hover {
+    color: #f49a25;
+    text-decoration: none;
 }
 
 /* 見かけ上削除。実際には消していない　*/
