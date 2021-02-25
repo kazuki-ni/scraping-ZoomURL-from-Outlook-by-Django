@@ -9,5 +9,6 @@ urlpatterns = [
     path('join/<int:pk>/', views.join, name='join'),
     path('update/<int:pk>/', views.update, name='update'),
     path('delete/<int:pk>/', views.delete, name='delete'),
+    path('scrape_sample_URLs/', views.scrape_sample_URLs, name='scrape_sample_URLs'),
 
 ]

@@ -4,7 +4,9 @@ from django.http import HttpResponse
 from .models import *
 from .forms import *
 
-from.ScrapeZoomURLfromOutlook import *
+from.ScrapeZoomURLfromOutlook import scrape
+from.scrape_from_json import scrape_sample_data
+
 
 # Create your views here.
 def scrape_URLs(request):
@@ -72,3 +74,10 @@ def delete(request, pk):
         item_id = 'mail-{}'.format(pk)
         item.delete()
         return HttpResponse(item_id)
+
+
+# Scrape sample data set
+def scrape_sample_URLs(request):
+
+    scrape_sample_data()
+    return redirect('/')
