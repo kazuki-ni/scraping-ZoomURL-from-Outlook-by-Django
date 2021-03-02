@@ -6,7 +6,7 @@ This is a web application that extracts and lists Zoom invitation emails in Outl
 
 
 This is the screen for determining the collection period. Users can start scraping by clicking the green button.
-The top 'Try with Sample Data Set' is a data set for quickly experience the app. By clicking it, a pre-prepared data set will be entered into the database.
+The top 'Try with Sample Data Set' is a data set to quickly experience the app. By clicking it, a pre-prepared data set will be entered into the database.
 
 ![Scrape Screen](images_for_README/scrape.png)
 
@@ -23,16 +23,16 @@ This application is developed by django framework using 1 app (named scraping_to
 # Skills we use
 
 - scraping (https://pypi.org/project/pywin32/)
-    - We use pywin32, a Python extension for Microsoft Windows, which provides access to much of the Win32 API, the ability to create and use COM objects, and the Pythonwin environment.
+    We use pywin32, a Python extension for Microsoft Windows, which provides access to much of the Win32 API, the ability to create and use COM objects, and the Pythonwin environment.
     
 - ajax
-    - We use it to delete HTML elements by clicking an icon without screen transition.
+    We use it to delete HTML elements by clicking an icon without screen transition.
     
 - django-bootstrap-datepicker-plus (https://pypi.org/project/django-bootstrap-datepicker-plus/)
-    - This is a very comvinient widget which has Date-Picker, Time-Picker, DateTime-Picker, Month-Picker and Year-Picker, and we can easily select options by date-range-pickers.
+    This is a very comvinient widget which has Date-Picker, Time-Picker, DateTime-Picker, Month-Picker and Year-Picker, and we can easily select options by date-range-pickers.
 
 - django-widget-tweaks (https://pypi.org/project/django-widget-tweaks/)
-    - This enables us to add parameters in css-like way, such as class, id, name, etc.
+    This enables us to add parameters in css-like way, such as class, id, name, etc.
 
 
 
