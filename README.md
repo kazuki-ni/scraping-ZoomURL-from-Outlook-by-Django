@@ -23,16 +23,16 @@ This application is developed by django framework using 1 app (named scraping_to
 # Skills we use
 
 - scraping (https://pypi.org/project/pywin32/)
-    We use pywin32, a Python extension for Microsoft Windows, which provides access to much of the Win32 API, the ability to create and use COM objects, and the Pythonwin environment.
+    - We use pywin32, a Python extension for Microsoft Windows, which provides access to much of the Win32 API, the ability to create and use COM objects, and the Pythonwin environment.
     
 - ajax
-    We use it to delete HTML elements by clicking an icon without screen transition.
+    - We use it to delete HTML elements by clicking an icon without screen transition.
     
 - django-bootstrap-datepicker-plus (https://pypi.org/project/django-bootstrap-datepicker-plus/)
-    This is a very comvinient widget which has Date-Picker, Time-Picker, DateTime-Picker, Month-Picker and Year-Picker, and we can easily select options by date-range-pickers.
+    - This is a very comvinient widget which has Date-Picker, Time-Picker, DateTime-Picker, Month-Picker and Year-Picker, and we can easily select options by date-range-pickers.
 
 - django-widget-tweaks (https://pypi.org/project/django-widget-tweaks/)
-    This enables us to add parameters in css-like way, such as class, id, name, etc.
+    - This enables us to add parameters, such as class, id, name, etc., in css-like way.
 
 
 
