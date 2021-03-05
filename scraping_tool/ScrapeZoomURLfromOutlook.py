@@ -8,7 +8,7 @@ import re
 from .models import *
 
 
-# Find the index which between scrape_from & scrape_until by binary serach
+# Find the index which between scrape_from & scrape_until by binary search
 def find_target_hint(mail_list, scrape_from, scrape_until):
     
     start_pos = 0
@@ -228,6 +228,8 @@ def scrape(sf, su):
         # Select an inbox folder
         inbox = list(filter(choose_inbox, address.Folders))[0]
         all_items = inbox.Items
+
+        # Sort by "ReceivedTime"
         all_items.Sort("[ReceivedTime]", False)
     
         # Input to model
