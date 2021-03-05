@@ -1,4 +1,4 @@
-# モジュールのインポート
+# Import module
 import win32com.client
 import pythoncom
 import datetime
@@ -8,77 +8,160 @@ import re
 from .models import *
 
 
-# 集計区間内のメールを選ぶ関数（outlookのメールの並びが変なため、変な関数）
-def choose_period(mails, scrape_from, scrape_until):
-
-    mail_set = []
-
-    for mail in list(mails)[:100]:
-
-        try:   
-            temp_t = str(mail.ReceivedTime).partition('+')[0].partition('.')[0]
-            received_time = datetime.datetime.strptime(temp_t, "%Y-%m-%d %H:%M:%S")
-            # 集計区間内に受信したメールを選択
-            if scrape_from <= received_time <= scrape_until:
-                mail_set.append(mail)
-
-        except:
-            # ReceivedTimeの変数を持たないメールは 弾く
-            continue
-
+# Find the index which between scrape_from & scrape_until by binary serach
+def find_target_hint(mail_list, scrape_from, scrape_until):
     
-    for mail in reversed(list(mails)[100:]):
+    start_pos = 0
+    end_pos = len(mail_list)
 
-        try:   
-            temp_t = str(mail.ReceivedTime).partition('+')[0].partition('.')[0]
-            received_time = datetime.datetime.strptime(temp_t, "%Y-%m-%d %H:%M:%S")
-            # 集計区間内に受信したメールを選択
-            if scrape_from <= received_time <= scrape_until:
-                mail_set.append(mail)
+    while True:
+        # Find an index of the center
+        center = int((start_pos + end_pos)/2)
 
+        # Shift the center if the mail does not have "ReceivedTime" property
+        center = find_valid_center(center, mail_list)
+
+        # Pick ReceivedTime of the mail and Format it to datetime type
+        center_time = format_datetime(mail_list[center].receivedTime)
+
+        if center_time < scrape_from:
+            start_pos = center
+        elif scrape_from <= center_time <= scrape_until:
+            target_hint = center
+            break
+        else:
+            end_pos = center
+
+    return target_hint, start_pos, end_pos
+
+
+# Format to datetime type
+def format_datetime(t):
+    temp_time = str(t).partition('+')[0].partition('.')[0]
+    format_time = datetime.datetime.strptime(temp_time, "%Y-%m-%d %H:%M:%S").astimezone(pytz.utc)
+    return format_time
+
+
+# Shift the center if the mail does not have the ReceivedTime property
+def find_valid_center(center, mail_list):
+    while True:
+        try:
+            _ = mail_list[center].receivedTime
+            return center
         except:
-            # ReceivedTimeの変数を持たないメールは弾く
+            center += 1
+
+
+# Input to model
+def input_to_model(mail_list, scrape_from, scrape_until):
+
+    # Find the index to efficiently input to model
+    target_hint, start_pos, end_pos = find_target_hint(mail_list, scrape_from, scrape_until)
+
+    # Create a data box to input to model
+    data_set = []
+
+    # After target_hint
+    for i in range(target_hint+1, end_pos):
+        mail = mail_list[i]
+        
+        # Skip the mail whose body does not have a http address of 'zoom.us'
+        body = mail.body
+        if not ('zoom.us' in body and 'http' in body):
             continue
 
-        if received_time < scrape_from:
-            break
+        # Skip the mail whose body does not have zoom URL
+        url_list = extract_url(body)
+        if url_list == '':
+            continue
 
-    return mail_set
+        try:   
+            received_time = format_datetime(mail.receivedTime)
+
+            # (target_hint) <= mails <= (scrape_until)
+            if received_time <= scrape_until:
+                # INSERT
+                data = Mail(
+                    sender = str(mail.sender).split("<")[-1].split('>')[0],     # Remove <>
+                    sender_email_address = mail.senderEmailAddress,
+                    received_time = received_time,
+                    url_list = url_list,
+                    body = format_body(body)
+                    )
+                data_set.append(data)
+
+            else:
+                break
+
+        except:
+            # Exclude the mails which does not have the "ReceivedTime" property
+            pass
+
+    # Before target_hint
+    for i in range(target_hint, start_pos, -1):
+        mail = mail_list[i]
+
+        # Skip the mail whose body does not have a http address of 'zoom.us'
+        body = mail.body
+        if not ('zoom.us' in body and 'http' in body):
+            continue
+
+        # Skip the mail whose body does not have zoom URL
+        url_list = extract_url(body)
+        if url_list == '':
+            continue
+
+        try:   
+            received_time = format_datetime(mail.receivedTime)
+            # (scrape_from) <= mails <= (target_hint) 
+            if scrape_from <= received_time:
+                # INSERT
+                data = Mail(
+                    sender = str(mail.sender).split("<")[-1].split('>')[0],     # Remove <>
+                    sender_email_address = mail.senderEmailAddress,
+                    received_time = received_time,
+                    url_list = url_list,
+                    body = format_body(body)
+                    )
+                data_set.append(data)
+            else:
+                break
+
+        except:
+            # Exclude the mails which does not have the "ReceivedTime" property
+            pass
+
+    # Input to model at once
+    Mail.objects.bulk_create(data_set)
 
 
-# 受信メールフォルダを選ぶ関数
+# Choose only inbox folder
 def choose_inbox(folder):
     return str(folder) in ['Inbox', 'inbox', '受信トレイ', 'INBOX']
 
 
-# 本文に'zoom.us'のhttpアドレスを含むメールのみTrueを返す関数
-def contains_zoom(mail):
-    body = mail.body
-    return 'zoom.us' in body and 'http' in body
-
-
-# ミーティング参加に関係のないURLは弾く
+# Exclude URLs that are not related to Zoom meeting participation
 def exclude_url(url):
 
-    # Zoomの公式サイト関係のURL
+    # URL related to Zoom's official website
     pattern_public = [
         "https://zoom.us/",
         "https://zoom.us/support/download",
         "https://zoom.us/test"
         ]
 
-    # 「カレンダーに追加」系のURL
+    # "Add to calendar" URL
     pattern_calender_1 = 'zoom.us/meeting/attendee/[\w/:%#\$&\?\(\)~\.=\+\-]+type='
     pattern_calender_2 = 'zoom.us/webinar/[\w/:%#\$&\?\(\)~\.=\+\-]+type='
 
-    # ミーティング登録キャンセルのURL
+    # URL for canceling meeting registration
     pattern_cancel_1 = 'zoom.us/meeting/register/[\w/:%#\$&\?\(\)~\.=\+\-]+act=cancel'
     pattern_cancel_2 = 'zoom.us/webinar/register/[\w/:%#\$&\?\(\)~\.=\+\-]+act=cancel'
 
-    # 国際通話用ダイヤルイン番号ページへのURL
+    # URL to the dial-in number page for international calls
     pattern_dial = 'zoom.us/u/\w+'
 
-    # まとめる
+    # Summarize to one pattern set
     patterns = re.compile('{}|{}|{}|{}|{}'.format(
         pattern_calender_1,
         pattern_calender_2,
@@ -87,7 +170,7 @@ def exclude_url(url):
         pattern_dial
     ))
 
-    # 除外処理
+    # Exclusion processing
     if url in pattern_public:
         return False
     elif patterns.search(url):
@@ -96,96 +179,56 @@ def exclude_url(url):
         return True
 
 
-# zoomのリンクを抽出する関数
+# Extract zoom URLs
 def extract_url(body):
     
-    # すべてのurlを抽出
+    # Extract all URLs
     url_pattern = 'https://[\.\-\w]*zoom.us/[\w/:%#\$&\?\(\)~\.=\+\-]+'
     temp_url_list = list(set(re.findall(url_pattern, body)))
 
-    # 以下のURLは弾く
+    # Exclude the following URLs
     url_list = list(filter(exclude_url, temp_url_list))
 
-    # URLを"|"で接続（DBにはリスト型は入らないため、URLに使われない'|'で結合）
+    # Connect URL with "|" 
+    # List type cannot be included in DB, so join with'|' which is not used in URL
     urls = '|'.join(url_list)
 
     return urls
 
 
-# メール本文を整える
+# Format the email body
 def format_body(body):
 
-    # <URL>を削除
+    # Remove <URL>
     pattern = '<https??://[\w/:%#\$&\?\(\)~\.=\+\-]+>'
     modified_body = re.sub(pattern, '', body)
 
-    # \r\nを'|'に置換（HTML表示するときに消えてしまうため）
+    # Replace these code with '|' or space to express the same condition in the template
     modified_body = modified_body.replace('\r\n', '|')
+    modified_body = modified_body.replace('\n', '|')
+    modified_body = modified_body.replace('\u3000', ' ')
 
     return modified_body
 
 
-# テーブルへ入力
-def input_table(mails):
-
-    # データセットの作成
-    data_set = []
-
-    # zoomアドレスを含むメール１通ごとの内容をテーブルに書き込む
-    for mail in mails:
-
-        # 受信日をdatetime(aware)型に変型（このやり方の方がdateutil.parserより速い）
-        temp_t = str(mail.ReceivedTime).partition('+')[0].partition('.')[0]
-        received_time = datetime.datetime.strptime(temp_t, "%Y-%m-%d %H:%M:%S").astimezone(pytz.utc)
-
-        mail_body = mail.body
-
-        # zoomのURLのかたまりを取り出す
-        url_list = extract_url(mail_body)
-
-        # メール本文を成形する
-        mail_body = format_body(mail_body)
-
-        # エラー処理
-        try:            
-            # INSERT
-            data = Mail(
-                sender = str(mail.sender).split("<")[-1].split('>')[0],     # 両側の<>をあれば取る
-                sender_email_address = mail.senderEmailAddress,
-                received_time = received_time,
-                url_list = url_list,
-                body = mail_body
-                )
-            data_set.append(data)
-
-        except:
-            print("Cannot Insert {}".format(mail.subject))
-    
-    # いっきにmodelに入力
-    Mail.objects.bulk_create(data_set)
-
-
-# 一連の処理をscrape()にまとめる
+# Combine a series of processes into scrape()
 def scrape(sf, su):
 
-    scrape_from = datetime.datetime(sf.year, sf.month, sf.day, 0, 0, 0)
-    scrape_until = datetime.datetime(su.year, su.month, su.day, 0, 0, 0)
+    scrape_from = datetime.datetime(sf.year, sf.month, sf.day, 0, 0, 0).astimezone(pytz.utc)
+    scrape_until = datetime.datetime(su.year, su.month, su.day+1, 0, 0, 0).astimezone(pytz.utc)
 
-    # これがないとerrorが出る
+    # Get an error without this
     pythoncom.CoInitialize()
 
     outlook = win32com.client.Dispatch('Outlook.Application').GetNamespace('MAPI')
 
-    # メールアドレスごとに処理
+    # Process by email address
     for address in outlook.Folders:
 
-        # 受信フォルダを選択
+        # Select an inbox folder
         inbox = list(filter(choose_inbox, address.Folders))[0]
-        
-        # zoomアドレスを持つメールを集計
-        items = choose_period(inbox.Items, scrape_from, scrape_until)
-        zoom_mails = list(filter(contains_zoom, items))
-
-        # テーブルに入力
-        input_table(zoom_mails)
-
+        all_items = inbox.Items
+        all_items.Sort("[ReceivedTime]", False)
+    
+        # Input to model
+        input_to_model(all_items, scrape_from, scrape_until)
