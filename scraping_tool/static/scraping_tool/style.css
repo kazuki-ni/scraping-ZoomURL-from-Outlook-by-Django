@@ -87,22 +87,6 @@ li {
     word-wrap: break-word;
 }
 
-.delete {
-    cursor: pointer;
-    color: rgb(255, 166, 0);
-}
-
-.delete:hover {
-    color: rgb(113, 87, 56);
-}
-.join {
-    cursor: pointer;
-    color:#60B564;
-}
-.join:hover {
-    color: #2C8030;
-}
-
 .a-style {
     color: #f49a25;
 }

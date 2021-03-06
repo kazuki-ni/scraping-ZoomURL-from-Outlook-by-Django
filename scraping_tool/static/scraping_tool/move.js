@@ -27,7 +27,6 @@ const emphasizeScraping = function() {
         document.getElementById('scraping').classList.remove('scraping-emphasis');
         document.getElementById('first-lead').style.display = 'block';
         document.getElementById('scraping-lead').style.display = 'none';
-        document.getElementsByClassName('sort-btn-scheduled')[0].style.display = 'none';
     }
 }
 
@@ -38,6 +37,7 @@ const displayNoSchedules = function() {
     } else {
         document.getElementById('null-warning').style.display = 'block';
         emphasizeScraping();
+        document.getElementsByClassName('sort-btn-scheduled')[0].style.display = 'none';
     }
 }
 window.onload = function(){
