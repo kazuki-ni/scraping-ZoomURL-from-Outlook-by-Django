@@ -1,4 +1,3 @@
-
 const scheduled_items = document.getElementById('scheduled-items');
 const unscheduled_items = document.getElementById('unscheduled-items');
 
@@ -28,6 +27,7 @@ const emphasizeScraping = function() {
         document.getElementById('scraping').classList.remove('scraping-emphasis');
         document.getElementById('first-lead').style.display = 'block';
         document.getElementById('scraping-lead').style.display = 'none';
+        document.getElementsByClassName('sort-btn-scheduled')[0].style.display = 'none';
     }
 }
 
@@ -44,29 +44,6 @@ window.onload = function(){
     displayNoSchedules();
 }
 
-
-// Filter
-const search = document.querySelector('.search input');
-
-const filterMails = (term, mails) => {
-
-    Array.from(mails.children)
-        // Filtering condtions
-        .filter((mail) => !mail.textContent.toLowerCase().includes(term))
-        .forEach((mail) => mail.classList.add('filtered'));
-
-    Array.from(mails.children)
-        .filter((mail) => mail.textContent.toLowerCase().includes(term))
-        .forEach((mail) => mail.classList.remove('filtered'));
-
-};
-
-search.addEventListener('keyup', () => {
-    // Remove spaces and convert to lower cases
-    const term = search.value.trim().toLowerCase();
-    filterMails(term, scheduled_items);
-    filterMails(term, unscheduled_items);
-});
 
 // Delete:Ajax (click the delete icon or click the delete nav)
 $('.delete-box').click(function(event) {
