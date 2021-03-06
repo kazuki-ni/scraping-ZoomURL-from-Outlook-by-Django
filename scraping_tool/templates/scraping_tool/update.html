@@ -42,22 +42,22 @@
                         {% csrf_token %}
                         {{ form.media }}
                         <div class="form-group mb-2">
-                            <label for="name" class="form-label text-light">Event Name: <span class="text-muted">*</span></label>
+                            <label for="name" class="form-label text-light">Event Name: <span class="text-white">*</span></label>
                             {% render_field form.name class+="col form-control" id+='name' %}
                         </div>
     
                         <div class="form-group mb-2">
-                            <label for="event_day" class="form-label text-light">Event Day: <span class="text-muted">*</span></label>
+                            <label for="event_day" class="form-label text-light">Event Day: <span class="text-white">*</span></label>
                             {% render_field form.event_day class+="col form-control" id+='event_day' %}
                         </div>
     
                         <div class='form-row mb-2'>
                             <div class="form-group col-md-6">
-                                <label for="start_time" class="form-label text-light">Start from: <span class="text-muted">*</span></label>
+                                <label for="start_time" class="form-label text-light">Start from: <span class="text-white">*</span></label>
                                 {% render_field form.start_time class+="form-control" id+='start_time' name+='start_time' %}
                             </div>
                             <div class="form-group col-md-6">
-                                <label for="end_time" class="form-label text-light">End at: <span class="text-muted">*</span></label>
+                                <label for="end_time" class="form-label text-light">End at: <span class="text-white">*</span></label>
                                 {% render_field form.end_time class+="form-control" id+='end_time' name+='end_time' %}
                             </div>
                         </div>
