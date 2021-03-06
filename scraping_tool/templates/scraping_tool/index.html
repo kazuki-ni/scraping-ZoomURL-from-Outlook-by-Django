@@ -23,7 +23,11 @@
     <main class='container-fluid mt-5'>
     
         <div class="py-5 text-left text-light">
-            <h3>Scheduled Events</h3>
+            <h3>
+                Scheduled Events
+                <i class="fas fa-sort-up sort-btn-scheduled"></i>
+                <i class="fas fa-sort-down sort-btn-scheduled" style="display: none;"></i>
+            </h3>
         </div>
 
         <div id='null-warning' class="text-center mail-box-no-hover" style="display: block;">
@@ -32,7 +36,7 @@
             <p id='scraping-lead' class="lead" style="display: none;">Do <a class='scraping-emphasis a-style' href="{% url 'scraping_tool:scrape_URLs' %}">Scraping</a> to start.</p>
         </div>
 
-        <ul id='scheduled-items' class='d-flex row justify-content-around mail-font'>
+        <ul id='scheduled-items' class='d-flex row justify-content-around mail-font no-space-list'>
             {% for item in scheduled_items %}
                 <a id='mail-{{ item.id }}' class='col-md-5 mail-box' href="{% url 'scraping_tool:update' item.id %}">
                     <li class='row'>
@@ -63,7 +67,11 @@
 
 
         <div class="py-5 text-left text-light subtitle">
-            <h3>Unscheduled Events</h3>
+            <h3>
+                Unscheduled Events
+                <i class="fas fa-sort-up sort-btn-unscheduled"></i>
+                <i class="fas fa-sort-down sort-btn-unscheduled" style="display: none;"></i>
+            </h3>
         </div>
         
         <ul id='unscheduled-items' class='d-flex row justify-content-around mail-font no-space-list'>
@@ -99,5 +107,6 @@
 
 {% block js %}
     <script src="{% static 'scraping_tool/move.js' %}"></script>
+    <script src="{% static 'scraping_tool/filter_sort.js' %}"></script>
 {% endblock %}
 
