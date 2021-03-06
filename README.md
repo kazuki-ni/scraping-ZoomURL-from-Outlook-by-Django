@@ -15,6 +15,13 @@ This is the screen for checking and updating the details of mails which users ch
 
 ![Update Screen](images_for_README/update.png)
 
+# How to execute
+```bash
+pip install -r requirements.txt
+python manage.py makemigrations
+python manage.py migrate
+python manage.py runserver
+```
 
 # How to develop this app
 
