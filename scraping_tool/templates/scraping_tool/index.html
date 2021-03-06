@@ -25,9 +25,10 @@
         <div class="py-5 text-left text-light">
             <h3>
                 Scheduled Events
-                <i class="fas fa-sort-up sort-btn-scheduled"></i>
-                <i class="fas fa-sort-down sort-btn-scheduled" style="display: none;"></i>
+                <span class="icon-sort-asc sort-btn-scheduled"></span>
+                <span class="icon-sort-desc sort-btn-scheduled" style="display: none;"></span>
             </h3>
+
         </div>
 
         <div id='null-warning' class="text-center mail-box-no-hover" style="display: block;">
@@ -50,12 +51,12 @@
                             <div class='row'>
                                 <object class='col'>
                                     <a href="{% url 'scraping_tool:join' item.id %}">
-                                        <i class="fas fa-sign-in-alt join"></i>
+                                        <span class="icon-sign-in join"></span>
                                     </a>
                                 </object>
                                 <object class='col'>
                                     <a class='delete-box' href="{% url 'scraping_tool:delete' item.id %}">
-                                        <i class='far fa-trash-alt delete'></i>
+                                        <span class="icon-trash-o delete"></span>
                                     </a>
                                 </object>
                             </div>
@@ -69,8 +70,8 @@
         <div class="py-5 text-left text-light subtitle">
             <h3>
                 Unscheduled Events
-                <i class="fas fa-sort-up sort-btn-unscheduled"></i>
-                <i class="fas fa-sort-down sort-btn-unscheduled" style="display: none;"></i>
+                <span class="icon-sort-asc sort-btn-unscheduled"></span>
+                <span class="icon-sort-desc sort-btn-unscheduled" style="display: none;"></span>
             </h3>
         </div>
         
@@ -91,8 +92,7 @@
                         <div class='col-sm-2'>
                             <object>
                                 <a class='delete-box' href="{% url 'scraping_tool:delete' item.id %}">
-                                    <i class='far fa-trash-alt delete'></i>
-                                </a>
+                                    <span class="icon-trash-o delete"></span>                                </a>
                             </object>
                         </div>
                     </li>
