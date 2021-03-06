@@ -15,8 +15,18 @@ def scrape_URLs(request):
     if request.method == 'POST':
         form = DatetimeForm(request.POST)
         if form.is_valid():
+
+            # Receive the values of scraping period
             collect_from = form.cleaned_data["collect_from"]
             collect_until = form.cleaned_data["collect_until"]
+
+            # Remove the related items firstly
+            items = Mail.objects.filter(
+                received_time__date__range=(collect_from, collect_until)
+            )
+            items.delete()
+
+            # Then, scrape
             scrape(collect_from, collect_until)
             return redirect('/')
 
