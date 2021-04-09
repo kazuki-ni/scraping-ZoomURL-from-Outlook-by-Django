@@ -5,11 +5,11 @@ const filterMails = (term, mails) => {
 
     Array.from(mails.children)
         // Filtering condtions
-        .filter((mail) => !mail.textContent.toLowerCase().includes(term))
+        .filter((mail) => !mail.getElementsByTagName('h6')[0].textContent.toLowerCase().includes(term))
         .forEach((mail) => mail.classList.add('filtered'));
 
     Array.from(mails.children)
-        .filter((mail) => mail.textContent.toLowerCase().includes(term))
+        .filter((mail) => mail.getElementsByTagName('h6')[0].textContent.toLowerCase().includes(term))
         .forEach((mail) => mail.classList.remove('filtered'));
 
 };
